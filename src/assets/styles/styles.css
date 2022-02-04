@@ -1,0 +1,83 @@
+/* fonts */
+@import url(https://fonts.googleapis.com/css?family=Inter);
+
+.resetIcon {
+    height: 18px;
+    width: 21px;
+    top: 3px;
+    right: 6px;
+}
+
+.txtReset {
+    font-size: 14px;
+    font-family: Inter;
+    font-style: normal;
+    line-height: 20px;
+    font-weight: 500;
+    color: #0052EA;
+    margin-top: 26px;
+    margin-right: 45px;
+}
+
+h4 {
+    font-size: 20px;
+    font-family: Inter;
+    font-style: normal;
+    line-height: 32px;
+    letter-spacing: -0.02px;
+}
+
+h5 {
+    font-size: 16px;
+    font-family: Inter;
+    font-style: normal;
+    line-height: 24px;
+    letter-spacing: -0.1px;
+    font-weight: 600;
+}
+
+input {
+    height: 48px;
+    /* width: 380px; */
+    border-style: 1px #E0E0E0;
+    border-radius: 4px;
+}
+
+.txtAddText {
+    font-size: 14px;
+    font-family: Inter;
+    font-style: normal;
+    line-height: 20px;
+    font-weight: 500;
+    color: #0052EA;
+    margin-top: 18px;
+    margin-right: 45px;
+}
+
+.salSumH6 {
+    font-size: 14px;
+    font-family: Inter;
+    font-style: normal;
+    line-height: 20px;
+    font-weight: 600;
+    color: #757575;
+    letter-spacing: 0.2px;
+}
+
+.salSumData {
+    font-size: 16px;
+    font-family: Inter;
+    font-style: normal;
+    line-height: 24px;
+    font-weight: 400;
+    color: #000000;
+}
+
+@media screen and (min-width: 769px) {
+    input {
+        height: 48px;
+        width: 380px;
+        border-style: 1px #E0E0E0;
+        border-radius: 4px;
+    }
+}

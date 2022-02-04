@@ -1,0 +1,53 @@
+/* fonts */
+@import url(https://fonts.googleapis.com/css?family=Inter);
+
+.inputSalaryCard{
+    margin: 132px 20px 132px 130px;
+    width: 680px;
+    height: 614px;
+    padding: 24px 45px 40px 40px;
+    border-style: 1px #E0E0E0;
+    border-radius: 8px;
+}
+
+h4{
+    font-size: 20px;
+    font-family: Inter;
+    font-style: normal;
+    line-height: 32px;
+    letter-spacing: -0.02px;
+}
+
+h5{
+    font-size: 16px;
+    font-family: Inter;
+    font-style: normal;
+    line-height: 24px;
+    letter-spacing: -0.1px;
+    font-weight: 600;
+}
+
+.resetIcon{
+    height: 18px;
+    width: 21px;
+    top: 3px;
+    right: 6px;
+}
+
+.txtReset{
+    font-size: 14px;
+    font-family: Inter;
+    font-style: normal;
+    line-height: 20px;
+    font-weight: 500;
+    color: #0052EA;
+    margin-top: 26px ;
+    margin-right: 45px;
+}
+
+input{
+    height: 48px;
+    width: 380px;
+    border-style: 1px #E0E0E0;
+    border-radius: 4px;
+}
