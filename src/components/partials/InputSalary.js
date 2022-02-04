@@ -1,7 +1,7 @@
 import React from 'react'
 import reset_icon from '../../assets/images/reset_icon.png'
 import plus_icon from '../../assets/images/plus_icon.png'
-import AllowanceItem from './AllowanceItem'
+import EarningItem from './EarningItem'
 import DeductionItem from './DeductionItem'
 
 function InputSalary(props) {
@@ -20,20 +20,20 @@ function InputSalary(props) {
 
             <h5>Basic Salary</h5>
             <div className="col-sm-8">
-                <input className="mb-4" type="number" value={Number(props.bacisSal)} onChange={(e)=>props.handlerBasicSalary(e.target.value)} />
+                <input className="mb-4" type="number" value={Number(props.salSummary.basicSal)} onChange={(e)=>props.handlerBasicSalary(e.target.value)} />
             </div>
 
             <div className="row ">
                 <h5 className="mb-0">Earnings</h5>
                 <p className="text-muted m-0">Allowance, Fixed Allowance, Bonus and etc.</p>
 
-                {/* ============ dynamically add new allowance ============= */}
+                {/* ============ dynamically add new Earning ============= */}
                 {
-                    props.allowanceArr.map((input) => {
+                    props.earningArr.map((input) => {
                         return (
-                            <AllowanceItem
-                                handlerDeleteAllowance={props.handlerDeleteAllowance}
-                                handlerChangeAllowance={props.handlerChangeAllowance}
+                            <EarningItem
+                                handlerDeleteEarning={props.handlerDeleteEarning}
+                                handlerChangeEarning={props.handlerChangeEarning}
                                 handlerChangeEPF={props.handlerChangeEPF}
                                 input={input}
                                 key={input._id}
@@ -58,8 +58,8 @@ function InputSalary(props) {
                 </div> */}
 
 
-                <span onClick={(e) => { props.handlerAddEmptyAllowance() }}>
-                    <img src={plus_icon} /> <span className="txtAddText">Add New Allowance</span>
+                <span onClick={(e) => { props.handlerAddEmptyEarning() }}>
+                    <img src={plus_icon} /> <span className="txtAddText">Add New Earning</span>
                 </span>
             </div>
 
@@ -67,7 +67,7 @@ function InputSalary(props) {
 
             <div className="row mb-4">
                 <h5 className="mb-0">Deduction</h5>
-                <p className="text-muted m-0">Allowance, Fixed Allowance, Bonus and etc.</p>
+                <p className="text-muted m-0">Earning, Fixed Earning, Bonus and etc.</p>
 
                 {
                     props.deductionArr.map((input) => {
