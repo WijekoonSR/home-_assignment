@@ -10,8 +10,8 @@ function getGrossEarning(basicSal, arrEarning) {
     return Number(basicSal) + totEarning
 }
 
-function getGrossDeduct(arr) {
-    const total = getTotalOfArray(arr)
+function getGrossDeduct(arrDeduction) {
+    const total = getTotalOfArray(arrDeduction)
     return total
 }
 

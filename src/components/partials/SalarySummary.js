@@ -1,12 +1,5 @@
 import React from 'react'
-import {
-    getTotalOfArray,
-    getgrossEarning,
-    getGrossDeduct,
-    getEPFOrETF,
-    getNetSal,
-    getCTC,
-} from '../../utils/salaryCalculator'
+
 
 function SalarySummary(props) {
     return (
@@ -30,8 +23,7 @@ function SalarySummary(props) {
                 <div className="d-flex">
                     <p className="salSumData">Gross Earning</p>
                     <div className="ms-auto salSumData">
-                       {/* {getgrossEarning(props.salSummary.basicSal, props.earningArr )} */}
-                       {props.salSummary.grossEarning}
+                        {props.salSummary.grossEarning}
                     </div>
                 </div>
                 <div className="d-flex">
@@ -43,7 +35,7 @@ function SalarySummary(props) {
                 <div className="d-flex">
                     <p className="salSumData">Employee EPF (8%)</p>
                     <div className="ms-auto salSumData">
-                    {props.salSummary.empEPF_8prcntage}
+                        {props.salSummary.empEPF_8prcntage}
                     </div>
                 </div>
             </div>
@@ -53,8 +45,8 @@ function SalarySummary(props) {
             <div className="border m-4 p-2">
                 <div className="d-flex">
                     <p>Net Salary (Take Home)</p>
-                    <div className="ms-auto salSumData">
-                    {props.salSummary.netSal}
+                    <div className="ms-auto salSumData pe-3">
+                        {props.salSummary.netSal}
                     </div>
                 </div>
             </div>
@@ -67,19 +59,19 @@ function SalarySummary(props) {
                 <div className="d-flex">
                     <p className="salSumData">Employeer EPF (12%)</p>
                     <div className="ms-auto salSumData">
-                    {props.salSummary.empEPF_12prcntage}
+                        {props.salSummary.empEPF_12prcntage}
                     </div>
                 </div>
                 <div className="d-flex">
                     <p className="salSumData">Employeer ETF (3%)</p>
                     <div className="ms-auto salSumData">
-                    {props.salSummary.empEPF_3prcntage}
+                        {props.salSummary.empEPF_3prcntage}
                     </div>
                 </div>
                 <div className="d-flex my-4">
                     <p className="salSumData">CTC (Cost to Company)</p>
                     <div className="ms-auto salSumData">
-                    {props.salSummary.ctc}
+                        {props.salSummary.ctc}
                     </div>
                 </div>
 

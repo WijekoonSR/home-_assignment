@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 import InputSalary from '../components/partials/InputSalary'
 import SalarySummary from '../components/partials/SalarySummary'
 import {
-    getTotalOfArray,
     getGrossEarning,
     getGrossDeduct,
     getEPFOrETF,
@@ -12,9 +11,8 @@ import {
 } from '../utils/salaryCalculator'
 
 function Main() {
-    const [basicSal, setBasicSal] = React.useState(0.00)
     const [salSummary, setSalSummary] = React.useState({
-        basicSal: 0.00,
+        basicSal: "",
         grossEarning: 0.0,
         grossDeduction: 0.0,
         netSal: 0.0,
@@ -27,37 +25,31 @@ function Main() {
     const [earningArr, setEarningArr] = React.useState([
         {
             _id: uuidv4(),
-            value: 0,
+            value: "",
             isEPF: false
         }
     ]);
     const [deductionArr, setDeductionArr] = React.useState([
         {
             _id: uuidv4(),
-            value: 0,
+            value: "",
         }
     ]);
 
     useEffect(() => {
-        const newGrossEarning = getGrossEarning(salSummary.basicSal, earningArr)
-        // const newSalSummary = { ...salSummary, grossEarning: newValue }
-        // setSalSummary()
-
+        // only check epf or etf checked items
         let arrEPFOrETF = []
-        earningArr.map((item) => {
-            if (item.isEPF) arrEPFOrETF.push(item)
-        })
-        // setArrEPFOrETF(newArr)
+        earningArr.map((item) =>
+            (item.isEPF) && arrEPFOrETF.push(item)
+        )
 
-        let empEPF8prcntage = getEPFOrETF(salSummary.basicSal, arrEPFOrETF, 0.08)
-        let empEPF12prcntage = getEPFOrETF(salSummary.basicSal, arrEPFOrETF, 0.12)
-        let empEPF3prcntage = getEPFOrETF(salSummary.basicSal, arrEPFOrETF, 0.03)
-        // let empEPF3prcntage = getEPFOrETF(salSummary.basicSal, arrEPFOrETF, 0.03)
-        let netSal = getNetSal()
+        const newGrossEarning = getGrossEarning(salSummary.basicSal, earningArr)
+        const empEPF8prcntage = getEPFOrETF(salSummary.basicSal, arrEPFOrETF, 0.08)
+        const empEPF12prcntage = getEPFOrETF(salSummary.basicSal, arrEPFOrETF, 0.12)
+        const empEPF3prcntage = getEPFOrETF(salSummary.basicSal, arrEPFOrETF, 0.03)
         const netSalary = getNetSal(newGrossEarning, salSummary.grossDeduction, empEPF8prcntage)
         const newCTC = getCTC(newGrossEarning, salSummary.grossDeduction, empEPF12prcntage, empEPF3prcntage)
 
-        // console.log(empEPF8prcntage)
         setSalSummary({
             ...salSummary,
             grossEarning: newGrossEarning,
@@ -71,27 +63,78 @@ function Main() {
     }, [earningArr])
 
     useEffect(() => {
-        const newValue = getGrossDeduct(deductionArr)
-        const netSalary = getNetSal(salSummary.grossEarning, salSummary.grossDeduction, salSummary.empEPF_8prcntage)
-        const newCTC = getCTC(salSummary.grossEarning, newValue, salSummary.empEPF_12prcntage, salSummary.empEPF_3prcntage)
+        const newGrossDeduct = getGrossDeduct(deductionArr)
+        const netSalary = getNetSal(salSummary.grossEarning, newGrossDeduct, salSummary.empEPF_8prcntage)
+        const newCTC = getCTC(salSummary.grossEarning, newGrossDeduct, salSummary.empEPF_12prcntage, salSummary.empEPF_3prcntage)
 
         setSalSummary({
             ...salSummary,
-            grossDeduction: newValue,
+            grossDeduction: newGrossDeduct,
             netSal: netSalary,
             ctc: newCTC
         })
+
     }, [deductionArr])
 
-    // useEffect(() => {
-    //     const netSalary = getNetSal(salSummary.grossEarning, salSummary.grossDeduction, salSummary.empEPF_8prcntage)
-    //     setSalSummary({ ...salSummary, netSal: netSalary })
-    // }, [salSummary])
+    useEffect(() => {
+        // only check epf or etf checked items
+        let arrEPFOrETF = []
+        earningArr.map((item) =>
+            (item.isEPF) && arrEPFOrETF.push(item)
+        )
+
+        const grossEarning = getGrossEarning(salSummary.basicSal, earningArr)
+        const empEPF8prcntage = getEPFOrETF(salSummary.basicSal, arrEPFOrETF, 0.08)
+        const empEPF12prcntage = getEPFOrETF(salSummary.basicSal, arrEPFOrETF, 0.12)
+        const empEPF3prcntage = getEPFOrETF(salSummary.basicSal, arrEPFOrETF, 0.03)
+        const netSalary = getNetSal(grossEarning, salSummary.grossDeduction, empEPF8prcntage)
+        const newCTC = getCTC(grossEarning, salSummary.grossDeduction, salSummary.empEPF_12prcntage, salSummary.empEPF_3prcntage)
+
+        setSalSummary({
+            ...salSummary,
+            netSal: netSalary,
+            empEPF_8prcntage: empEPF8prcntage,
+            empEPF_12prcntage: empEPF12prcntage,
+            empEPF_3prcntage: empEPF3prcntage,
+            ctc: newCTC
+        })
+
+    }, [salSummary.basicSal])
+
+
+    // =========================== Reset Handler ==============================
+    const handlerReset = () => {
+        setSalSummary({
+            basicSal: "",
+            grossEarning: 0.0,
+            grossDeduction: 0.0,
+            netSal: 0.0,
+            empEPF_8prcntage: 0.0,
+            empEPF_12prcntage: 0.0,
+            empEPF_3prcntage: 0.0,
+            ctc: 0.0
+
+        })
+
+        setEarningArr([{
+            _id: uuidv4(),
+            value: "",
+            isEPF: false
+        }]);
+
+        setDeductionArr([{
+            _id: uuidv4(),
+            value: "",
+        }]);
+        
+    }
 
     // =========================== Basic Salary Handler ==============================
     const handlerBasicSalary = (value) => {
-        setSalSummary({ ...salSummary, basicSal: value })
-        console.log(salSummary)
+        setSalSummary({
+            ...salSummary,
+            basicSal: value,
+        })
     }
 
     // =========================== Earning Handlers ==============================
@@ -109,9 +152,8 @@ function Main() {
             }
             return item
         })
-        setEarningArr(newList)
 
-        console.log(earningArr)
+        setEarningArr(newList)
     }
 
     const handlerChangeEPF = (id, value) => {
@@ -128,7 +170,6 @@ function Main() {
             return item
         })
         setEarningArr(newList)
-
     }
 
     const handlerAddEmptyEarning = () => {
@@ -167,7 +208,6 @@ function Main() {
 
     // =========================== Deduction Handlers ==============================
     const handlerChangeDeduction = (id, value) => {
-
         const newList = deductionArr.map((item) => {
             if ((item._id === id)) {
                 const newValue = {
@@ -179,8 +219,8 @@ function Main() {
             }
             return item
         })
+
         setDeductionArr(newList)
-        console.log(deductionArr)
     }
 
     const handlerAddEmptyDeduction = () => {
@@ -197,7 +237,7 @@ function Main() {
 
     const handlerDeletededuction = (id) => {
         const newDeductionArr = deductionArr.filter(item => (item._id !== id))
-        console.log(newDeductionArr)
+
         setDeductionArr(newDeductionArr)
     }
 
@@ -218,6 +258,7 @@ function Main() {
                     handlerChangeDeduction={handlerChangeDeduction}
                     handlerAddEmptyDeduction={handlerAddEmptyDeduction}
                     handlerDeletededuction={handlerDeletededuction}
+                    handlerReset={handlerReset}
                 />
             </div>
             <div className="col">

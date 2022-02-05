@@ -38,7 +38,7 @@ h5 {
 
 input {
     height: 48px;
-    /* width: 380px; */
+    width: 50%;
     border-style: 1px #E0E0E0;
     border-radius: 4px;
 }
@@ -71,6 +71,10 @@ input {
     line-height: 24px;
     font-weight: 400;
     color: #000000;
+}
+
+.cursorPointerShow{
+    cursor: pointer;
 }
 
 @media screen and (min-width: 769px) {
