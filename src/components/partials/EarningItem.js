@@ -14,7 +14,7 @@ function EarningItem(props) {
                     />
                     <span>
                         <img
-                            className=" d-inline rounded-circle bg-secondary p-2 ms-3 mt-0"
+                            className=" d-inline rounded-circle bg-secondary p-2 ms-2 mt-0"
                             src={close_icon}
                             alt=""
                             onClick={() => {
@@ -30,7 +30,8 @@ function EarningItem(props) {
             <div className="col-sm-4 col-md-4 col-lg-4">
                 <div className="form-check mt-1">
                     <input className="form-check-input" type="checkbox" value=""
-                        onClick={() => props.handlerChangeEPF(props.input._id, props.input.value)}
+                        checked={props.input.isEPF}
+                        onChange={(e) => props.handlerChangeEPF(props.input._id, props.input.value)}
                     />
                     <label className="form-check-label" >
                         EPF/ETF

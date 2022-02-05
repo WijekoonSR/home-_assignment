@@ -1,4 +1,6 @@
 import React from 'react'
+import { isBrowser, isMobile } from 'react-device-detect';
+import { JS_NumberFormat } from 'js-number-formatter'
 import reset_icon from '../../assets/images/reset_icon.png'
 import plus_icon from '../../assets/images/plus_icon.png'
 import EarningItem from './EarningItem'
@@ -7,7 +9,8 @@ import DeductionItem from './DeductionItem'
 function InputSalary(props) {
 
     return (
-        <div className='card p-5 m-5 shadow-lg rounded'>
+        <div className={"inputSalaryCard card shadow-lg rounded p-5 " + (isMobile && " mt-3 me-2 ms-2 ") + (isBrowser && " mt-5 me-5 ms-5")}>
+
             <div className="d-flex mb-3">
                 <h4>Calculate Your Salary</h4>
                 <div className="ms-auto" onClick={() => props.handlerReset()}>
@@ -22,6 +25,7 @@ function InputSalary(props) {
                 <input
                     className="mb-4"
                     type="number"
+                    // value={new Intl.NumberFormat('en-IN').format(props.salSummary.basicSal)}
                     value={(props.salSummary.basicSal)}
                     onChange={(e) => props.handlerBasicSalary(e.target.value)}
                 />

@@ -14,7 +14,7 @@ function DeductionItem(props) {
                     />
                     <span>
                         <img
-                            className=" d-inline rounded-circle bg-secondary p-2 ms-3 mt-0"
+                            className=" d-inline rounded-circle bg-secondary p-2 ms-2 mt-0"
                             alt=""
                             src={close_icon}
                             onClick={() => {

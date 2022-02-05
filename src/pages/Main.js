@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid';
+import { ToastContainer, toast } from 'react-toastify';
 import InputSalary from '../components/partials/InputSalary'
 import SalarySummary from '../components/partials/SalarySummary'
+import { storeSalSummary, storeEarningArr, storeDeductionArr, getSalSummary, getEarningArr, getDeductionArr, clearStorage } from '../utils/localStorage';
+import { isEmpty } from '../utils/validations'
 import {
     getGrossEarning,
     getGrossDeduct,
@@ -12,29 +15,32 @@ import {
 
 function Main() {
     const [salSummary, setSalSummary] = React.useState({
-        basicSal: "",
-        grossEarning: 0.0,
-        grossDeduction: 0.0,
-        netSal: 0.0,
-        empEPF_8prcntage: 0.0,
-        empEPF_12prcntage: 0.0,
-        empEPF_3prcntage: 0.0,
-        ctc: 0.0
+        // basicSal: 0,
+        basicSal: (isEmpty(getSalSummary())) ? 0 : getSalSummary().basicSal,
+        grossEarning: (isEmpty(getSalSummary())) ? 0 : getSalSummary().grossEarning,
+        grossDeduction: (isEmpty(getSalSummary())) ? 0 : getSalSummary().grossDeduction,
+        netSal: (isEmpty(getSalSummary())) ? 0 : getSalSummary().netSal,
+        empEPF_8prcntage: (isEmpty(getSalSummary())) ? 0 : getSalSummary().empEPF_8prcntage,
+        empEPF_12prcntage: (isEmpty(getSalSummary())) ? 0 : getSalSummary().empEPF_12prcntage,
+        empEPF_3prcntage: (isEmpty(getSalSummary())) ? 0 : getSalSummary().empEPF_3prcntage,
+        ctc: (isEmpty(getSalSummary())) ? 0 : getSalSummary().ctc,
 
     })
-    const [earningArr, setEarningArr] = React.useState([
-        {
+    const [earningArr, setEarningArr] = React.useState(
+        isEmpty(getEarningArr()) ? [{
             _id: uuidv4(),
             value: "",
             isEPF: false
-        }
-    ]);
-    const [deductionArr, setDeductionArr] = React.useState([
-        {
+        }] : getEarningArr());
+
+    const [deductionArr, setDeductionArr] = React.useState(
+        isEmpty(getDeductionArr()) ? [{
             _id: uuidv4(),
             value: "",
-        }
-    ]);
+        }] : getDeductionArr());
+
+
+    const initialRender = React.useRef(true);
 
     useEffect(() => {
         // only check epf or etf checked items
@@ -60,6 +66,11 @@ function Main() {
             ctc: newCTC
         })
 
+        // save on local storage
+        if (!initialRender.current) storeSalSummary(salSummary)
+
+        console.log("earningArr")
+
     }, [earningArr])
 
     useEffect(() => {
@@ -74,6 +85,10 @@ function Main() {
             ctc: newCTC
         })
 
+        // save on local storage
+        if (!initialRender.current) storeSalSummary(salSummary)
+        console.log("deduction arr")
+
     }, [deductionArr])
 
     useEffect(() => {
@@ -83,12 +98,12 @@ function Main() {
             (item.isEPF) && arrEPFOrETF.push(item)
         )
 
-        const grossEarning = getGrossEarning(salSummary.basicSal, earningArr)
+        const newGrossEarning = getGrossEarning(salSummary.basicSal, earningArr)
         const empEPF8prcntage = getEPFOrETF(salSummary.basicSal, arrEPFOrETF, 0.08)
         const empEPF12prcntage = getEPFOrETF(salSummary.basicSal, arrEPFOrETF, 0.12)
         const empEPF3prcntage = getEPFOrETF(salSummary.basicSal, arrEPFOrETF, 0.03)
-        const netSalary = getNetSal(grossEarning, salSummary.grossDeduction, empEPF8prcntage)
-        const newCTC = getCTC(grossEarning, salSummary.grossDeduction, salSummary.empEPF_12prcntage, salSummary.empEPF_3prcntage)
+        const netSalary = getNetSal(newGrossEarning, salSummary.grossDeduction, empEPF8prcntage)
+        const newCTC = getCTC(newGrossEarning, salSummary.grossDeduction, empEPF12prcntage, empEPF3prcntage)
 
         setSalSummary({
             ...salSummary,
@@ -99,13 +114,33 @@ function Main() {
             ctc: newCTC
         })
 
+        // save on local storage 
+        if (!initialRender.current) storeSalSummary(salSummary)
+        console.log("salSummary.basicSal")
+        console.log(salSummary.basicSal)
+        console.log(earningArr, arrEPFOrETF)
+        console.log(newGrossEarning, salSummary.grossDeduction, empEPF12prcntage, empEPF3prcntage)
+        console.log(newCTC)
+
     }, [salSummary.basicSal])
 
+    useEffect(() => {
+        const x = getSalSummary()
+
+        // setBasicSal(x)
+        // let y = JSON. parse(x)
+        // let type = typeof(y)
+        // setBasicSal(x)
+        if (initialRender.current) initialRender.current = false
+        console.log(isEmpty(getSalSummary()))
+        console.log(isEmpty(getEarningArr()))
+        console.log(new Intl.NumberFormat('en-IN').format(21521212));
+    }, [])
 
     // =========================== Reset Handler ==============================
     const handlerReset = () => {
         setSalSummary({
-            basicSal: "",
+            basicSal: 0.0,
             grossEarning: 0.0,
             grossDeduction: 0.0,
             netSal: 0.0,
@@ -126,7 +161,18 @@ function Main() {
             _id: uuidv4(),
             value: "",
         }]);
-        
+
+        clearStorage();
+
+        toast.success('Reset Succesfully!', {
+            position: "bottom-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
     }
 
     // =========================== Basic Salary Handler ==============================
@@ -135,6 +181,7 @@ function Main() {
             ...salSummary,
             basicSal: value,
         })
+        console.log("basicSal")
     }
 
     // =========================== Earning Handlers ==============================
@@ -144,7 +191,6 @@ function Main() {
             if ((item._id === id)) {
                 const newValue = {
                     _id: id,
-                    type: "text",
                     value: value,
                     isEPF: isEPF
                 }
@@ -154,6 +200,9 @@ function Main() {
         })
 
         setEarningArr(newList)
+
+        // save on local storage
+        storeEarningArr(newList)
     }
 
     const handlerChangeEPF = (id, value) => {
@@ -161,7 +210,6 @@ function Main() {
             if ((item._id === id)) {
                 const newValue = {
                     _id: id,
-                    type: "text",
                     value: value,
                     isEPF: !item.isEPF
                 }
@@ -170,6 +218,9 @@ function Main() {
             return item
         })
         setEarningArr(newList)
+
+        // save on local storage
+        storeEarningArr(newList)
     }
 
     const handlerAddEmptyEarning = () => {
@@ -177,13 +228,15 @@ function Main() {
         const newearningArr = [
             ...earningArr, {
                 _id: uuidv4(),
-                type: "text",
                 value: "",
                 isEPF: false
             }
         ]
 
         setEarningArr(newearningArr)
+
+        // save on local storage
+        storeEarningArr(newearningArr)
     }
 
     const handlerAddEarning = (data) => {
@@ -191,19 +244,24 @@ function Main() {
         const newearningArr = [
             ...earningArr, {
                 _id: uuidv4(),
-                type: "text",
                 value: data.value,
                 isEPF: data.isEPF
             }
         ]
 
         setEarningArr(newearningArr)
+
+        // save on local storage
+        storeEarningArr(newearningArr)
     }
 
     const handlerDeleteEarning = (id) => {
         const newearningArr = earningArr.filter(item => (item._id !== id))
         console.log(newearningArr)
         setEarningArr(newearningArr)
+
+        // save on local storage
+        storeEarningArr(newearningArr)
     }
 
     // =========================== Deduction Handlers ==============================
@@ -212,7 +270,6 @@ function Main() {
             if ((item._id === id)) {
                 const newValue = {
                     _id: id,
-                    type: "text",
                     value: value,
                 }
                 return newValue
@@ -221,24 +278,32 @@ function Main() {
         })
 
         setDeductionArr(newList)
+
+        // save on local storage
+        storeDeductionArr(newList)
     }
 
     const handlerAddEmptyDeduction = () => {
         const newDeductionArr = [
             ...deductionArr, {
                 _id: uuidv4(),
-                type: "text",
                 value: "",
             }
         ]
 
         setDeductionArr(newDeductionArr)
+
+        // save on local storage
+        storeDeductionArr(newDeductionArr)
     }
 
     const handlerDeletededuction = (id) => {
         const newDeductionArr = deductionArr.filter(item => (item._id !== id))
 
         setDeductionArr(newDeductionArr)
+
+        // save on local storage
+        storeDeductionArr(newDeductionArr)
     }
 
 
@@ -268,6 +333,17 @@ function Main() {
                     deductionArr={deductionArr}
                 />
             </div>
+            <ToastContainer
+                position="bottom-right"
+                autoClose={1000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss={false}
+                draggable
+                pauseOnHover
+            />
         </div>
     )
 }
