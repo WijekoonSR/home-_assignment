@@ -1,6 +1,5 @@
 import React from 'react'
 import { isBrowser, isMobile } from 'react-device-detect';
-import { JS_NumberFormat } from 'js-number-formatter'
 import reset_icon from '../../assets/images/reset_icon.png'
 import plus_icon from '../../assets/images/plus_icon.png'
 import EarningItem from './EarningItem'
@@ -9,7 +8,7 @@ import DeductionItem from './DeductionItem'
 function InputSalary(props) {
 
     return (
-        <div className={"inputSalaryCard card shadow-lg rounded p-5 " + (isMobile && " mt-3 me-2 ms-2 ") + (isBrowser && " mt-5 me-5 ms-5")}>
+        <div className={"card bg-card  shadow-lg rounded p-5 " + (isMobile && " mt-3 me-2 ms-2 ") + (isBrowser && " mt-5 me-5 ms-5")}>
 
             <div className="d-flex mb-3">
                 <h4>Calculate Your Salary</h4>
@@ -24,8 +23,7 @@ function InputSalary(props) {
             <div className="col-sm-8">
                 <input
                     className="mb-4"
-                    type="number"
-                    // value={new Intl.NumberFormat('en-IN').format(props.salSummary.basicSal)}
+                    type="text"
                     value={(props.salSummary.basicSal)}
                     onChange={(e) => props.handlerBasicSalary(e.target.value)}
                 />
@@ -40,11 +38,11 @@ function InputSalary(props) {
                     props.earningArr.map((input) => {
                         return (
                             <EarningItem
+                                input={input}
+                                key={input._id}
                                 handlerDeleteEarning={props.handlerDeleteEarning}
                                 handlerChangeEarning={props.handlerChangeEarning}
                                 handlerChangeEPF={props.handlerChangeEPF}
-                                input={input}
-                                key={input._id}
                             />
                         )
                     })
@@ -66,16 +64,16 @@ function InputSalary(props) {
                     props.deductionArr.map((input) => {
                         return (
                             <DeductionItem
-                                handlerDeletededuction={props.handlerDeletededuction}
-                                handlerChangeDeduction={props.handlerChangeDeduction}
                                 input={input}
                                 key={input._id}
+                                handlerDeletededuction={props.handlerDeletededuction}
+                                handlerChangeDeduction={props.handlerChangeDeduction}
                             />
                         )
                     })
                 }
 
-                <span className="cursorPointerShow" onClick={(e) => { props.handlerAddEmptyDeduction() }}>
+                <span className="cursorPointerShow " onClick={(e) => { props.handlerAddEmptyDeduction() }}>
                     <img alt="" src={plus_icon} /> <span className="txtAddText">Add New Deduction</span>
                 </span>
             </div>

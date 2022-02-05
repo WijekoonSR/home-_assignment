@@ -1,11 +1,12 @@
 import React from 'react'
-import {  isBrowser, isMobile } from 'react-device-detect';
+import { isBrowser, isMobile } from 'react-device-detect';
+import { JS_NumberFormat } from 'js-number-formatter'
 
 function SalarySummary(props) {
     return (
         <>
 
-            <div className={"card shadow-lg rounded" + (isMobile && " mt-3 me-2 ms-2 ") + (isBrowser && " mt-5 me-5 ms-5")}>
+            <div className={"card bg-card shadow-lg rounded" + (isMobile && " mt-3 me-2 ms-2 ") + (isBrowser && " mt-5 me-5 ms-5")}>
 
                 <div className="pt-5 ps-5 pe-5">
                     <h4>Your Salary</h4>
@@ -19,25 +20,25 @@ function SalarySummary(props) {
                     <div className="d-flex">
                         <p className="salSumData">Basic Salary</p>
                         <div className="ms-auto salSumData">
-                            {props.salSummary.basicSal}
+                            {JS_NumberFormat(props.salSummary.basicSal)}
                         </div>
                     </div>
                     <div className="d-flex">
                         <p className="salSumData">Gross Earning</p>
                         <div className="ms-auto salSumData">
-                            {props.salSummary.grossEarning}
+                            {JS_NumberFormat(props.salSummary.grossEarning)}
                         </div>
                     </div>
                     <div className="d-flex">
                         <p className="salSumData">Gross Deduction</p>
                         <div className="ms-auto salSumData">
-                            {props.salSummary.grossDeduction}
+                            {JS_NumberFormat(props.salSummary.grossDeduction)}
                         </div>
                     </div>
                     <div className="d-flex">
                         <p className="salSumData">Employee EPF (8%)</p>
                         <div className="ms-auto salSumData">
-                            {props.salSummary.empEPF_8prcntage}
+                            {JS_NumberFormat(props.salSummary.empEPF_8prcntage)}
                         </div>
                     </div>
                 </div>
@@ -48,7 +49,7 @@ function SalarySummary(props) {
                     <div className="d-flex">
                         <h5 className="ms-3">Net Salary (Take Home)</h5>
                         <h5 className="ms-auto  pe-3 ">
-                            {props.salSummary.netSal}
+                            {JS_NumberFormat(props.salSummary.netSal)}
                         </h5>
                     </div>
                 </div>
@@ -61,19 +62,19 @@ function SalarySummary(props) {
                     <div className="d-flex">
                         <p className="salSumData">Employeer EPF (12%)</p>
                         <div className="ms-auto salSumData">
-                            {props.salSummary.empEPF_12prcntage}
+                            {JS_NumberFormat(props.salSummary.empEPF_12prcntage)}
                         </div>
                     </div>
                     <div className="d-flex">
                         <p className="salSumData">Employeer ETF (3%)</p>
                         <div className="ms-auto salSumData">
-                            {props.salSummary.empEPF_3prcntage}
+                            {JS_NumberFormat(props.salSummary.empEPF_3prcntage)}
                         </div>
                     </div>
                     <div className="d-flex my-4">
                         <p className="salSumData">CTC (Cost to Company)</p>
                         <div className="ms-auto salSumData">
-                            {props.salSummary.ctc}
+                            {JS_NumberFormat(props.salSummary.ctc)}
                         </div>
                     </div>
 

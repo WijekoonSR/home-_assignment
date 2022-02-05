@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.1.3",
     "has-value": "^2.0.2",
+    "js-number-formatter": "^1.0.1",
     "local-storage": "^2.0.0",
     "lodash": "^4.17.21",
     "lodash.isempty": "^4.4.0",

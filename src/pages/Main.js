@@ -3,19 +3,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { ToastContainer, toast } from 'react-toastify';
 import InputSalary from '../components/partials/InputSalary'
 import SalarySummary from '../components/partials/SalarySummary'
-import { storeSalSummary, storeEarningArr, storeDeductionArr, getSalSummary, getEarningArr, getDeductionArr, clearStorage } from '../utils/localStorage';
 import { isEmpty } from '../utils/validations'
-import {
-    getGrossEarning,
-    getGrossDeduct,
-    getEPFOrETF,
-    getNetSal,
-    getCTC,
-} from '../utils/salaryCalculator'
+import { getGrossEarning, getGrossDeduct, getEPFOrETF, getNetSal, getCTC, } from '../utils/salaryCalculator'
+import { storeSalSummary, storeEarningArr, storeDeductionArr, getSalSummary, getEarningArr, getDeductionArr, clearStorage } from '../utils/localStorage';
 
 function Main() {
     const [salSummary, setSalSummary] = React.useState({
-        // basicSal: 0,
         basicSal: (isEmpty(getSalSummary())) ? 0 : getSalSummary().basicSal,
         grossEarning: (isEmpty(getSalSummary())) ? 0 : getSalSummary().grossEarning,
         grossDeduction: (isEmpty(getSalSummary())) ? 0 : getSalSummary().grossDeduction,
@@ -26,6 +19,7 @@ function Main() {
         ctc: (isEmpty(getSalSummary())) ? 0 : getSalSummary().ctc,
 
     })
+
     const [earningArr, setEarningArr] = React.useState(
         isEmpty(getEarningArr()) ? [{
             _id: uuidv4(),
@@ -43,7 +37,7 @@ function Main() {
     const initialRender = React.useRef(true);
 
     useEffect(() => {
-        // only check epf or etf checked items
+        // only check epf or etf items
         let arrEPFOrETF = []
         earningArr.map((item) =>
             (item.isEPF) && arrEPFOrETF.push(item)
@@ -66,13 +60,12 @@ function Main() {
             ctc: newCTC
         })
 
-        // save on local storage
+        // save on local storage 
         if (!initialRender.current) storeSalSummary(salSummary)
-
-        console.log("earningArr")
 
     }, [earningArr])
 
+    // trigger only change on deduction Array
     useEffect(() => {
         const newGrossDeduct = getGrossDeduct(deductionArr)
         const netSalary = getNetSal(salSummary.grossEarning, newGrossDeduct, salSummary.empEPF_8prcntage)
@@ -87,10 +80,10 @@ function Main() {
 
         // save on local storage
         if (!initialRender.current) storeSalSummary(salSummary)
-        console.log("deduction arr")
 
     }, [deductionArr])
 
+    // trigger only change on salSummary.basicSal
     useEffect(() => {
         // only check epf or etf checked items
         let arrEPFOrETF = []
@@ -116,28 +109,16 @@ function Main() {
 
         // save on local storage 
         if (!initialRender.current) storeSalSummary(salSummary)
-        console.log("salSummary.basicSal")
-        console.log(salSummary.basicSal)
-        console.log(earningArr, arrEPFOrETF)
-        console.log(newGrossEarning, salSummary.grossDeduction, empEPF12prcntage, empEPF3prcntage)
-        console.log(newCTC)
 
     }, [salSummary.basicSal])
 
+    // after initial render 
     useEffect(() => {
-        const x = getSalSummary()
-
-        // setBasicSal(x)
-        // let y = JSON. parse(x)
-        // let type = typeof(y)
-        // setBasicSal(x)
         if (initialRender.current) initialRender.current = false
-        console.log(isEmpty(getSalSummary()))
-        console.log(isEmpty(getEarningArr()))
-        console.log(new Intl.NumberFormat('en-IN').format(21521212));
     }, [])
 
-    // =========================== Reset Handler ==============================
+    // =========================== Handlers ==============================
+    // =========================== Reset input data - Handler ==============================
     const handlerReset = () => {
         setSalSummary({
             basicSal: 0.0,
@@ -162,6 +143,7 @@ function Main() {
             value: "",
         }]);
 
+        // clear local storage items
         clearStorage();
 
         toast.success('Reset Succesfully!', {
@@ -175,17 +157,15 @@ function Main() {
         });
     }
 
-    // =========================== Basic Salary Handler ==============================
+    // =========================== Basic Salary - Handler ==============================
     const handlerBasicSalary = (value) => {
         setSalSummary({
             ...salSummary,
             basicSal: value,
         })
-        console.log("basicSal")
     }
 
-    // =========================== Earning Handlers ==============================
-
+    // =========================== Change earning - Handler ==============================
     const handlerChangeEarning = (id, value, isEPF) => {
         const newList = earningArr.map((item) => {
             if ((item._id === id)) {
@@ -205,6 +185,7 @@ function Main() {
         storeEarningArr(newList)
     }
 
+    // =========================== Change EPF/ ETF - Handler ==============================
     const handlerChangeEPF = (id, value) => {
         const newList = earningArr.map((item) => {
             if ((item._id === id)) {
@@ -223,6 +204,7 @@ function Main() {
         storeEarningArr(newList)
     }
 
+    // =========================== Add empty earning input fields - Handler ==============================
     const handlerAddEmptyEarning = () => {
 
         const newearningArr = [
@@ -239,32 +221,19 @@ function Main() {
         storeEarningArr(newearningArr)
     }
 
-    const handlerAddEarning = (data) => {
-
-        const newearningArr = [
-            ...earningArr, {
-                _id: uuidv4(),
-                value: data.value,
-                isEPF: data.isEPF
-            }
-        ]
-
-        setEarningArr(newearningArr)
-
-        // save on local storage
-        storeEarningArr(newearningArr)
-    }
-
+    // =========================== Delete selected earning input values - Handler ==============================
     const handlerDeleteEarning = (id) => {
+        // filter item except deleting one
         const newearningArr = earningArr.filter(item => (item._id !== id))
-        console.log(newearningArr)
+
+        //assigned/set filtered item except deleted one
         setEarningArr(newearningArr)
 
         // save on local storage
         storeEarningArr(newearningArr)
     }
 
-    // =========================== Deduction Handlers ==============================
+    // =========================== Add Deduction input values - Handler ==============================
     const handlerChangeDeduction = (id, value) => {
         const newList = deductionArr.map((item) => {
             if ((item._id === id)) {
@@ -283,6 +252,7 @@ function Main() {
         storeDeductionArr(newList)
     }
 
+    // =========================== Add empty deduction input fields - Handler ==============================
     const handlerAddEmptyDeduction = () => {
         const newDeductionArr = [
             ...deductionArr, {
@@ -297,6 +267,7 @@ function Main() {
         storeDeductionArr(newDeductionArr)
     }
 
+    // =========================== Delete selected deduction input values - Handler ==============================
     const handlerDeletededuction = (id) => {
         const newDeductionArr = deductionArr.filter(item => (item._id !== id))
 
@@ -313,13 +284,12 @@ function Main() {
                 <InputSalary
                     salSummary={salSummary}
                     earningArr={earningArr}
+                    deductionArr={deductionArr}
                     handlerBasicSalary={handlerBasicSalary}
-                    handlerAddEarning={handlerAddEarning}
                     handlerAddEmptyEarning={handlerAddEmptyEarning}
                     handlerDeleteEarning={handlerDeleteEarning}
                     handlerChangeEarning={handlerChangeEarning}
                     handlerChangeEPF={handlerChangeEPF}
-                    deductionArr={deductionArr}
                     handlerChangeDeduction={handlerChangeDeduction}
                     handlerAddEmptyDeduction={handlerAddEmptyDeduction}
                     handlerDeletededuction={handlerDeletededuction}
