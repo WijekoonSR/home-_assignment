@@ -60,8 +60,7 @@ function Main() {
             ctc: newCTC
         })
 
-        // save on local storage 
-        if (!initialRender.current) storeSalSummary(salSummary)
+        storeEarningArr(earningArr)
 
     }, [earningArr])
 
@@ -79,7 +78,7 @@ function Main() {
         })
 
         // save on local storage
-        if (!initialRender.current) storeSalSummary(salSummary)
+        storeDeductionArr(deductionArr)
 
     }, [deductionArr])
 
@@ -107,10 +106,11 @@ function Main() {
             ctc: newCTC
         })
 
-        // save on local storage 
-        if (!initialRender.current) storeSalSummary(salSummary)
-
     }, [salSummary.basicSal])
+
+    useEffect(() => {
+        if (!initialRender.current) storeSalSummary(salSummary)
+    }, [salSummary.basicSal, salSummary.grossDeduction, salSummary.grossEarning])
 
     // after initial render 
     useEffect(() => {
@@ -182,7 +182,7 @@ function Main() {
         setEarningArr(newList)
 
         // save on local storage
-        storeEarningArr(newList)
+        // storeEarningArr(newList)
     }
 
     // =========================== Change EPF/ ETF - Handler ==============================
@@ -201,7 +201,7 @@ function Main() {
         setEarningArr(newList)
 
         // save on local storage
-        storeEarningArr(newList)
+        // storeEarningArr(newList)
     }
 
     // =========================== Add empty earning input fields - Handler ==============================
@@ -218,7 +218,7 @@ function Main() {
         setEarningArr(newearningArr)
 
         // save on local storage
-        storeEarningArr(newearningArr)
+        // storeEarningArr(newearningArr)
     }
 
     // =========================== Delete selected earning input values - Handler ==============================
@@ -230,7 +230,7 @@ function Main() {
         setEarningArr(newearningArr)
 
         // save on local storage
-        storeEarningArr(newearningArr)
+        // storeEarningArr(newearningArr)
     }
 
     // =========================== Add Deduction input values - Handler ==============================
@@ -248,8 +248,7 @@ function Main() {
 
         setDeductionArr(newList)
 
-        // save on local storage
-        storeDeductionArr(newList)
+
     }
 
     // =========================== Add empty deduction input fields - Handler ==============================
@@ -264,7 +263,7 @@ function Main() {
         setDeductionArr(newDeductionArr)
 
         // save on local storage
-        storeDeductionArr(newDeductionArr)
+        // storeDeductionArr(newDeductionArr)
     }
 
     // =========================== Delete selected deduction input values - Handler ==============================
@@ -274,7 +273,7 @@ function Main() {
         setDeductionArr(newDeductionArr)
 
         // save on local storage
-        storeDeductionArr(newDeductionArr)
+        // storeDeductionArr(newDeductionArr)
     }
 
 
